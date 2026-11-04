@@ -4,19 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kinsley's Personal Space</title>
+<!-- 引入 Futura 风格的几何无衬线字体 (League Spartan / Futura 替代方案) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --black: #111;
   --white: #fff;
   --gray: #666;
-  --futura-font: Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --typewriter: "Courier New", Courier, monospace;
+  --futura-font: 'League Spartan', Futura, -apple-system, sans-serif;
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#fff;color:var(--black)}
 
+/* 全局应用 Futura 几何无衬线字体 */
 body {
   font-family: var(--futura-font);
   overflow-x: hidden;
@@ -31,13 +35,13 @@ body {
   z-index: 0;
 }
 
-/* 蓝色雪花与高对比度圆点 */
+/* 蓝色雪花与清晰可见的圆点 */
 .flake {
   position: absolute;
   top: -30px;
   left: var(--x);
   opacity: var(--o);
-  color: #4a90e2;
+  color: #4a90e2; /* 蓝色的雪花 */
   font-size: var(--s);
   animation: fall var(--t) linear var(--d) infinite;
   user-select: none;
@@ -46,7 +50,7 @@ body {
   width: var(--s);
   height: var(--s);
   border-radius: 50%;
-  background: #222;
+  background: #222; /* 确保圆点清晰可见，不被白色背景覆盖 */
   box-shadow: 0 0 2px rgba(0,0,0,0.2);
 }
 
@@ -68,7 +72,7 @@ main {
   align-items: center;
 }
 
-/* 顶部标题放大且采用 Futura 几何无衬线体 */
+/* 4. 顶部标题字体放大且采用 Futura */
 header {
   font-family: var(--futura-font);
   font-size: 16px;
@@ -152,17 +156,16 @@ header {
 .timer-box {
   text-align: center;
   z-index: 5;
-  font-family: var(--typewriter);
 }
 
-/* 倒计时层级优化：Hours Lived 明显比 Birthday 大 */
+/* 2. 倒计时层级：数字比文字大，Hours Lived 比 Birthday 更大 */
 .birthday-val {
-  font-size: clamp(18px, 3.8vw, 24px);
+  font-size: clamp(20px, 4vw, 26px);
   font-weight: 700;
   letter-spacing: -.02em;
 }
 .lived-val {
-  font-size: clamp(23px, 4.6vw, 31px);
+  font-size: clamp(24px, 4.8vw, 32px); /* 下方倒计时明显更大 */
   font-weight: 700;
   letter-spacing: -.02em;
 }
@@ -174,10 +177,9 @@ header {
   letter-spacing: .25em;
   text-transform: uppercase;
   color: var(--gray);
-  font-family: var(--futura-font);
 }
 
-/* 字母/数字流：贯穿到底部并消失在屏幕外 */
+/* 1. 字母/数字流：贯穿到底部并消失在屏幕外 */
 .wordfield {
   position: absolute;
   inset: 0;
@@ -191,7 +193,6 @@ header {
   top: var(--y);
   font-size: var(--size);
   font-weight: 600;
-  font-family: var(--typewriter);
   white-space: nowrap;
   letter-spacing: -.03em;
   opacity: 0;
@@ -207,6 +208,7 @@ header {
   12% { opacity: 0.9; }
   85% { opacity: 0.8; }
   100% {
+    /* 彻底落到屏幕最下方，穿过播放器区域并淡出 */
     transform: translate(-140vw, 105vh) rotate(calc(var(--rot) - 30deg));
     opacity: 0;
   }
@@ -303,7 +305,7 @@ header {
   <section class="scene">
     <div class="wordfield" id="wordfield"></div>
 
-    <!-- 马吉拉解构风高级雪人与实时倒计时 -->
+    <!-- 马吉拉解构风高级雪人 -->
     <div class="margiela-snowman">
       <div class="m-hat"></div>
       <div class="m-head">
@@ -344,7 +346,7 @@ header {
 <audio id="audioPlayer" preload="none"></audio>
 
 <script>
-// 1. 动态蓝色雪花与圆点生成
+// 1. 动态蓝色雪花与高对比度圆点生成
 const snow = document.querySelector('#snow');
 const flakeCount = innerWidth < 600 ? 40 : 75;
 
@@ -363,17 +365,19 @@ for (let i = 0; i < flakeCount; i++) {
   snow.append(f);
 }
 
-// 2. 字母与数字流（落至最底端消失）
+// 3. 从右往左倾泻的 26个英文字母与 0-9 数字池（大小错落，最大比原来小一点，最小适中）
 const charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".split('');
-const field = document.querySelector('#wordfield');
 
+const field = document.querySelector('#wordfield');
 for (let i = 0; i < 22; i++) {
   const char = charPool[Math.floor(Math.random() * charPool.length)];
   const e = document.createElement('span');
   e.className = 'word';
   e.textContent = char;
 
+  // 尺寸调整：最大比之前小一点（限制在 14px - 28px 之间），最小也不太小
   const size = 14 + Math.random() * 14;
+  
   e.style.setProperty('--y', (2 + (i * 8) % 75) + '%');
   e.style.setProperty('--size', size + 'px');
   e.style.setProperty('--rot', (-35 + Math.random() * 70) + 'deg');
@@ -382,7 +386,7 @@ for (let i = 0; i < 22; i++) {
   field.append(e);
 }
 
-// 3. 倒计时实时计算逻辑
+// 2. 倒计时实时计算（Hours Lived 字体大于 Birthday）
 const birth = new Date(2002, 11, 22, 0, 0, 0);
 const pad = n => String(n).padStart(2, '0');
 
@@ -401,13 +405,13 @@ function tick() {
 tick();
 setInterval(tick, 1000);
 
-// 4. 音乐播放器控制
+// 音乐播放器基础控制
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
 
 playBtn.addEventListener('click', () => {
   if(!audio.src || audio.src.endsWith('/')) {
-    alert("播放器已就绪！后续在源码中填入 MP3 音频链接即可播放。");
+    alert("播放器准备就绪！后续在源码中填入 MP3 音频链接即可播放。");
     return;
   }
   if (audio.paused) {
