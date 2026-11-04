@@ -5,21 +5,26 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kinsley's Personal Space</title>
 
+<!-- 引入 Web 标准 Bodoni Moda 字体，彻底解决跨设备白屏问题 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,700;1,6..96,400&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --black: #111;
   --white: #fff;
   --gray: #666;
-  --futura-font: Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --typewriter-font: 'Courier Prime', Courier, 'Courier New', monospace;
-  --bodoni-font: "Bodoni 72", Didot, "Times New Roman", serif;
+  /* 全局统一使用 Bodoni 字体 */
+  --bodoni-font: 'Bodoni Moda', "Bodoni 72", Didot, "Times New Roman", serif;
+  --typewriter-font: 'Courier Prime', Courier, monospace;
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#fff;color:var(--black)}
 
 body {
-  font-family: var(--futura-font);
+  font-family: var(--bodoni-font);
   overflow-x: hidden;
   letter-spacing: 0.02em;
 }
@@ -69,7 +74,7 @@ main {
   align-items: center;
 }
 
-/* 2 & 4. 顶部标题使用加粗 Bodoni 字体并放大，右下方附带 No. 22 */
+/* 顶部标题：Bodoni 字体 + 右下方 No. 22 */
 .site-header {
   text-align: center;
   padding: 16px 0 28px;
@@ -82,11 +87,480 @@ main {
 
 .main-title {
   font-family: var(--bodoni-font);
-  font-size: 19px;
+  font-size: clamp(18px, 4.5vw, 22px);
   font-weight: 700;
-  letter-spacing: .25em;
+  letter-spacing: .22em;
   color: #111;
 }
 
 .sub-no {
-  font-family: var(--bodoni-font
+  font-family: var(--bodoni-font);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: #333;
+  position: absolute;
+  right: 0;
+  bottom: -16px;
+}
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  overflow: hidden;
+}
+
+/* 经典雪人结构保留 */
+.snowman {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 270px;
+  height: 340px;
+  transform: translate(-50%,-50%) scale(.82);
+  z-index: 3;
+}
+
+.head, .ball {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1.3px solid #222;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.head { top: 8px; width: 110px; height: 100px; }
+
+.upper {
+  top: 92px;
+  width: 180px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lower {
+  top: 215px;
+  width: 235px;
+  height: 205px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hat {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: -4px;
+  width: 50px;
+  height: 40px;
+  transform: translateX(-50%) rotate(7deg);
+  background: #111;
+}
+.hat:after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -10px;
+  width: 70px;
+  height: 5px;
+  background: #111;
+  border-radius: 50%;
+}
+
+.eye {
+  position: absolute;
+  top: 43px;
+  left: calc(50% - 15px);
+  width: 5px;
+  height: 5px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 25px 0 #111;
+}
+.nose {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  width: 16px;
+  border-top: 1px solid #111;
+  transform: rotate(10deg);
+}
+.arm {
+  position: absolute;
+  top: 132px;
+  width: 65px;
+  border-top: 1px solid #111;
+}
+.arm.l { right: calc(50% + 70px); transform: rotate(34deg); }
+.arm.r { left: calc(50% + 70px); transform: rotate(-34deg); }
+.arm:after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 0;
+  width: 18px;
+  border-top: 1px solid #111;
+  transform: rotate(35deg);
+}
+
+.timer {
+  width: 90%;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 4;
+}
+
+/* 倒计时使用 Bodoni 字体 */
+.birthday-value {
+  display: block;
+  font-family: var(--bodoni-font);
+  font-size: clamp(20px, 4vw, 27px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+}
+
+.lived-value {
+  display: block;
+  font-family: var(--bodoni-font);
+  font-size: clamp(24px, 4.8vw, 33px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+}
+
+.label {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #333;
+  font-weight: 600;
+  font-family: var(--bodoni-font);
+}
+
+/* 倾泻的字母数字流 */
+.wordfield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.word {
+  position: absolute;
+  right: -25%;
+  top: var(--y);
+  font-size: var(--size);
+  font-weight: 700;
+  font-family: var(--bodoni-font);
+  white-space: nowrap;
+  letter-spacing: -.03em;
+  opacity: 0;
+  animation: spill var(--duration) linear var(--delay) infinite;
+  user-select: none;
+}
+
+@keyframes spill {
+  0% {
+    transform: translate(0, -12vh) rotate(var(--rot));
+    opacity: 0;
+  }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.85; }
+  100% {
+    transform: translate(-140vw, 116vh) rotate(calc(var(--rot) - 20deg));
+    opacity: 0;
+  }
+}
+
+.player {
+  z-index: 3;
+  width: min(600px, 100%);
+  border-top: 1px solid #bbb;
+  padding-top: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: auto;
+  background: #fff;
+  font-family: var(--bodoni-font);
+}
+
+.cover {
+  width: 56px;
+  height: 56px;
+  border: 1px solid #222;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.player-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.song { font-size: 14px; font-weight: 700; }
+.artist { font-size: 11px; color: var(--gray); }
+
+.controls-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bodoni-font);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 6px;
+  color: var(--black);
+  user-select: none;
+}
+.btn:hover { text-decoration: underline; }
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #eee;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  position: relative;
+}
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--black);
+}
+
+@media(max-width:600px){
+  main{padding:24px 16px 30px}
+  .scene{height:520px}
+  .snowman{transform:translate(-50%,-50%) scale(.72)}
+}
+</style>
+</head>
+<body>
+
+<div id="snow" aria-hidden="true"></div>
+
+<main>
+  <header class="site-header">
+    <div class="title-wrap">
+      <span class="main-title">KINSLEY'S PERSONAL SPACE</span>
+      <span class="sub-no">No. 22</span>
+    </div>
+  </header>
+
+  <section class="scene">
+    <div class="wordfield" id="wordfield"></div>
+
+    <div class="snowman">
+      <div class="hat"></div>
+      <div class="head">
+        <i class="eye"></i>
+        <i class="nose"></i>
+      </div>
+      <div class="arm l"></div>
+      <div class="arm r"></div>
+
+      <div class="ball upper">
+        <div class="timer birthday">
+          <span class="birthday-value" id="birthday">--:--:--</span>
+          <span class="label">Next Birthday</span>
+        </div>
+      </div>
+      <div class="ball lower">
+        <div class="timer lived">
+          <span class="lived-value" id="lived">--:--:--</span>
+          <span class="label">Hours Lived</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="player">
+    <div class="cover" id="albumCover"></div>
+    <div class="player-controls">
+      <div class="player-info">
+        <div>
+          <span class="song" id="songTitle">My Playlist</span>
+          <span class="artist" id="artistName">Kinsley's Choice</span>
+        </div>
+        <div class="controls-btns">
+          <button class="btn" id="prevBtn">│◄</button>
+          <button class="btn" id="playBtn">► PLAY</button>
+          <button class="btn" id="nextBtn">►│</button>
+        </div>
+      </div>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<audio id="audioPlayer" preload="auto"></audio>
+
+<script>
+// 蓝色雪花与高对比度圆点生成
+const snow = document.querySelector('#snow');
+const flakeCount = innerWidth < 600 ? 45 : 75;
+
+for (let i = 0; i < flakeCount; i++) {
+  const f = document.createElement('span');
+  const isBall = Math.random() < 0.25;
+  f.className = 'flake' + (isBall ? ' ball' : '');
+  if (!isBall) f.textContent = '❄';
+
+  f.style.setProperty('--x', Math.random() * 100 + '%');
+  f.style.setProperty('--s', (isBall ? 2 + Math.random() * 3 : 8 + Math.random() * 10) + 'px');
+  f.style.setProperty('--o', 0.3 + Math.random() * 0.6);
+  f.style.setProperty('--t', (10 + Math.random() * 18) + 's');
+  f.style.setProperty('--d', (-Math.random() * 25) + 's');
+  f.style.setProperty('--drift', (-60 + Math.random() * 120) + 'px');
+  snow.append(f);
+}
+
+// 26个英文字母与 0-9 数字池
+const charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".split('');
+const field = document.querySelector('#wordfield');
+
+for (let i = 0; i < 18; i++) {
+  const char = charPool[Math.floor(Math.random() * charPool.length)];
+  const e = document.createElement('span');
+  e.className = 'word';
+  e.textContent = char;
+
+  const size = 14 + Math.random() * 13;
+  e.style.setProperty('--y', (3 + (i * 12) % 75) + '%');
+  e.style.setProperty('--size', size + 'px');
+  e.style.setProperty('--rot', (-25 + Math.random() * 50) + 'deg');
+  e.style.setProperty('--duration', (14 + Math.random() * 10) + 's');
+  e.style.setProperty('--delay', (-i * 2.0) + 's');
+  field.append(e);
+}
+
+// 倒计时实时计算逻辑
+const birth = new Date(2002, 11, 22, 0, 0, 0);
+const pad = n => String(n).padStart(2, '0');
+
+function tick() {
+  const now = new Date();
+  let sLived = Math.max(0, Math.floor((now - birth) / 1000));
+  const livedEl = document.querySelector('#lived');
+  if(livedEl) livedEl.textContent = `${Math.floor(sLived / 3600)}:${pad(Math.floor((sLived % 3600) / 60))}:${pad(sLived % 60)}`;
+
+  let next = new Date(now.getFullYear(), 11, 22);
+  if (now >= next) next = new Date(now.getFullYear() + 1, 11, 22);
+  let sBirth = Math.max(0, Math.floor((next - now) / 1000));
+  const birthEl = document.querySelector('#birthday');
+  if(birthEl) birthEl.textContent = `${Math.floor(sBirth / 86400) * 24 + Math.floor((sBirth % 86400) / 3600)}:${pad(Math.floor((sBirth % 3600) / 60))}:${pad(sBirth % 60)}`;
+}
+tick();
+setInterval(tick, 1000);
+
+// 音乐播放器控制逻辑
+const playlist = [
+  {
+    title: "Winter Chill",
+    artist: "Kinsley's Choice",
+    cover: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100%' height='100%' fill='%23111'/><circle cx='50' cy='50' r='20' fill='%23fff'/></svg>",
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+  }
+];
+
+let currentIndex = 0;
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const songTitle = document.getElementById('songTitle');
+const artistName = document.getElementById('artistName');
+const albumCover = document.getElementById('albumCover');
+const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
+
+function loadSong(index) {
+  const song = playlist[index];
+  songTitle.textContent = song.title;
+  artistName.textContent = song.artist;
+  albumCover.style.backgroundImage = `url('${song.cover}')`;
+  audio.src = song.src;
+}
+
+function playSong() {
+  audio.play().then(() => {
+    playBtn.textContent = '❚❚ PAUSE';
+  }).catch(e => {
+    console.log("Play prevented:", e);
+  });
+}
+
+function pauseSong() {
+  audio.pause();
+  playBtn.textContent = '► PLAY';
+}
+
+playBtn.addEventListener('click', () => {
+  if (audio.paused) {
+    playSong();
+  } else {
+    pauseSong();
+  }
+});
+
+prevBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+  loadSong(currentIndex);
+  playSong();
+});
+
+nextBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % playlist.length;
+  loadSong(currentIndex);
+  playSong();
+});
+
+audio.addEventListener('ended', () => {
+  currentIndex = (currentIndex + 1) % playlist.length;
+  loadSong(currentIndex);
+  playSong();
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+  }
+});
+
+progressBar.addEventListener('click', (e) => {
+  const width = progressBar.clientWidth;
+  const clickX = e.offsetX;
+  if (audio.duration) {
+    audio.currentTime = (clickX / width) * audio.duration;
+  }
+});
+
+loadSong(currentIndex);
+</script>
+</body>
+</html>
