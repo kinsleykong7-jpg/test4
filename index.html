@@ -10,7 +10,6 @@
   --black: #111;
   --white: #fff;
   --gray: #666;
-  /* 使用系统自带的高级几何无衬线与打字机字体，零网络请求，杜绝空白卡死 */
   --futura-font: Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --typewriter: "Courier New", Courier, monospace;
 }
@@ -156,14 +155,14 @@ header {
   font-family: var(--typewriter);
 }
 
-/* 倒计时层级：数字比文字大，Hours Lived 比 Birthday 更大 */
+/* 倒计时层级优化：Hours Lived 明显比 Birthday 大 */
 .birthday-val {
-  font-size: clamp(20px, 4vw, 26px);
+  font-size: clamp(18px, 3.8vw, 24px);
   font-weight: 700;
   letter-spacing: -.02em;
 }
 .lived-val {
-  font-size: clamp(24px, 4.8vw, 32px);
+  font-size: clamp(23px, 4.6vw, 31px);
   font-weight: 700;
   letter-spacing: -.02em;
 }
@@ -304,7 +303,7 @@ header {
   <section class="scene">
     <div class="wordfield" id="wordfield"></div>
 
-    <!-- 马吉拉解构风高级雪人 -->
+    <!-- 马吉拉解构风高级雪人与实时倒计时 -->
     <div class="margiela-snowman">
       <div class="m-hat"></div>
       <div class="m-head">
@@ -345,10 +344,80 @@ header {
 <audio id="audioPlayer" preload="none"></audio>
 
 <script>
-// 1. 动态蓝色雪花与高对比度圆点生成
+// 1. 动态蓝色雪花与圆点生成
 const snow = document.querySelector('#snow');
 const flakeCount = innerWidth < 600 ? 40 : 75;
 
 for (let i = 0; i < flakeCount; i++) {
   const f = document.createElement('span');
-  const isBall = Math.random() < 0.
+  const isBall = Math.random() < 0.22;
+  f.className = 'flake' + (isBall ? ' ball' : '');
+  if (!isBall) f.textContent = '❄';
+
+  f.style.setProperty('--x', Math.random() * 100 + '%');
+  f.style.setProperty('--s', (isBall ? 3 + Math.random() * 3 : 9 + Math.random() * 11) + 'px');
+  f.style.setProperty('--o', 0.3 + Math.random() * 0.6);
+  f.style.setProperty('--t', (10 + Math.random() * 16) + 's');
+  f.style.setProperty('--d', (-Math.random() * 22) + 's');
+  f.style.setProperty('--drift', (-60 + Math.random() * 120) + 'px');
+  snow.append(f);
+}
+
+// 2. 字母与数字流（落至最底端消失）
+const charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".split('');
+const field = document.querySelector('#wordfield');
+
+for (let i = 0; i < 22; i++) {
+  const char = charPool[Math.floor(Math.random() * charPool.length)];
+  const e = document.createElement('span');
+  e.className = 'word';
+  e.textContent = char;
+
+  const size = 14 + Math.random() * 14;
+  e.style.setProperty('--y', (2 + (i * 8) % 75) + '%');
+  e.style.setProperty('--size', size + 'px');
+  e.style.setProperty('--rot', (-35 + Math.random() * 70) + 'deg');
+  e.style.setProperty('--duration', (12 + Math.random() * 10) + 's');
+  e.style.setProperty('--delay', (-i * 1.5) + 's');
+  field.append(e);
+}
+
+// 3. 倒计时实时计算逻辑
+const birth = new Date(2002, 11, 22, 0, 0, 0);
+const pad = n => String(n).padStart(2, '0');
+
+function tick() {
+  const now = new Date();
+  let sLived = Math.max(0, Math.floor((now - birth) / 1000));
+  const livedEl = document.querySelector('#lived');
+  if(livedEl) livedEl.textContent = `${Math.floor(sLived / 3600)}:${pad(Math.floor((sLived % 3600) / 60))}:${pad(sLived % 60)}`;
+
+  let next = new Date(now.getFullYear(), 11, 22);
+  if (now >= next) next = new Date(now.getFullYear() + 1, 11, 22);
+  let sBirth = Math.max(0, Math.floor((next - now) / 1000));
+  const birthEl = document.querySelector('#birthday');
+  if(birthEl) birthEl.textContent = `${Math.floor(sBirth / 86400) * 24 + Math.floor((sBirth % 86400) / 3600)}:${pad(Math.floor((sBirth % 3600) / 60))}:${pad(sBirth % 60)}`;
+}
+tick();
+setInterval(tick, 1000);
+
+// 4. 音乐播放器控制
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+
+playBtn.addEventListener('click', () => {
+  if(!audio.src || audio.src.endsWith('/')) {
+    alert("播放器已就绪！后续在源码中填入 MP3 音频链接即可播放。");
+    return;
+  }
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = '❚❚ PAUSE';
+  } else {
+    audio.pause();
+    playBtn.textContent = '▶ PLAY';
+  }
+});
+</script>
+</body>
+</html>
