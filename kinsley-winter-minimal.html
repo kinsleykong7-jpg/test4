@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kinsley's Personal Space</title>
+<style>
+:root{--black:#111;--white:#fff;--gray:#aaa}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#fff;color:var(--black)}
+body{font-family:"Bodoni 72",Didot,"Times New Roman",serif;overflow-x:hidden}
+#snow{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.flake{position:absolute;top:-20px;left:var(--x);opacity:var(--o);color:var(--c);font-size:var(--s);animation:fall var(--t) linear var(--d) infinite}
+.flake.ball{width:var(--s);height:var(--s);border-radius:50%;background:var(--c)}
+@keyframes fall{to{transform:translate3d(var(--drift),110vh,0) rotate(360deg)}}
+main{position:relative;z-index:1;max-width:900px;min-height:100svh;margin:auto;padding:32px 22px 38px;display:flex;flex-direction:column;align-items:center}
+header{font-size:14px;letter-spacing:.16em;text-align:center;padding:12px 0 20px}
+.scene{position:relative;width:100%;height:560px;overflow:hidden}
+.snowman{position:absolute;left:50%;top:48%;width:270px;height:340px;transform:translate(-50%,-50%) scale(.82);z-index:3}
+.head,.ball{position:absolute;left:50%;transform:translateX(-50%);border:1.3px solid #222;border-radius:50%;background:rgba(255,255,255,.96)}
+.head{top:8px;width:110px;height:100px}.upper{top:92px;width:180px;height:160px}.lower{top:215px;width:235px;height:205px}
+.hat{position:absolute;z-index:2;left:50%;top:-4px;width:50px;height:40px;transform:translateX(-50%) rotate(7deg);background:#111}
+.hat:after{content:"";position:absolute;bottom:-4px;left:-10px;width:70px;height:5px;background:#111;border-radius:50%}
+.eye{position:absolute;top:43px;left:calc(50% - 15px);width:5px;height:5px;background:#111;border-radius:50%;box-shadow:25px 0 #111}
+.nose{position:absolute;top:56px;left:50%;width:16px;border-top:1px solid #111;transform:rotate(10deg)}
+.arm{position:absolute;top:132px;width:65px;border-top:1px solid #111}.arm.l{right:calc(50% + 70px);transform:rotate(34deg)}.arm.r{left:calc(50% + 70px);transform:rotate(-34deg)}
+.arm:after{content:"";position:absolute;top:-7px;left:0;width:18px;border-top:1px solid #111;transform:rotate(35deg)}
+.timer{position:absolute;left:50%;transform:translateX(-50%);width:90%;text-align:center;white-space:nowrap;z-index:4}
+.value{display:block;font-size:clamp(17px,3.5vw,26px);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.label{display:block;margin-top:7px;font:9px Arial,sans-serif;letter-spacing:.3em;text-transform:uppercase}
+.birthday{top:126px}.lived{top:270px}
+.wordfield{position:absolute;inset:0;z-index:2;pointer-events:none}
+.word{position:absolute;right:-30%;top:var(--y);font-size:var(--size);white-space:nowrap;letter-spacing:-.06em;transform:rotate(var(--rot));opacity:0;animation:spill var(--duration) ease-in-out var(--delay) infinite}
+@keyframes spill{0%{transform:translate(0,-15vh) rotate(var(--rot));opacity:0}12%,65%{opacity:1}100%{transform:translate(-135vw,78vh) rotate(calc(var(--rot) - 20deg));opacity:0}}
+.landed{position:absolute;left:var(--x);bottom:var(--y);font-size:var(--size);white-space:nowrap;transform:rotate(var(--rot));opacity:.9}
+.name{font-size:clamp(20px,3vw,27px);font-style:italic;margin:0 0 28px;z-index:3}
+.player{z-index:3;width:min(600px,100%);border-top:1px solid #bbb;padding-top:16px;display:flex;gap:14px;align-items:center;margin-top:auto}
+.cover{width:54px;height:54px;border:1px solid #222;background:linear-gradient(135deg,#fff 0 45%,#ddd 46% 65%,#111 66%)}
+.song{font-size:15px}.artist{font-size:12px;color:#666;margin-top:3px}
+@media(max-width:600px){main{padding:24px 16px 30px}.scene{height:520px}.snowman{transform:translate(-50%,-50%) scale(.72)}}
+</style>
+</head>
+<body>
+<div id="snow" aria-hidden="true"></div>
+<main>
+<header>KINSLEY'S PERSONAL SPACE</header>
+<section class="scene">
+<div class="wordfield" id="wordfield"></div>
+<div class="snowman">
+<div class="hat"></div><div class="head"><i class="eye"></i><i class="nose"></i></div>
+<div class="arm l"></div><div class="arm r"></div>
+<div class="ball upper"></div><div class="ball lower"></div>
+<div class="timer birthday"><span class="value" id="birthday">--:--:--</span><span class="label">Next Birthday</span></div>
+<div class="timer lived"><span class="value" id="lived">--:--:--</span><span class="label">Hours Lived</span></div>
+</div>
+</section>
+<div class="name">kinsleykong</div>
+<div class="player"><div class="cover"></div><div><div class="song">Your song goes here</div><div class="artist">Artist name · music player placeholder</div></div></div>
+</main>
+<script>
+const snow=document.querySelector('#snow');
+for(let i=0;i<(innerWidth<600?42:70);i++){
+ const f=document.createElement('span'),ball=Math.random()<.58;
+ f.className='flake'+(ball?' ball':'');if(!ball)f.textContent='❄';
+ f.style.setProperty('--x',Math.random()*100+'%');
+ f.style.setProperty('--s',(ball?2+Math.random()*5:7+Math.random()*10)+'px');
+ f.style.setProperty('--c',Math.random()<.5?'#111':'#aaa');
+ f.style.setProperty('--o',.18+Math.random()*.5);
+ f.style.setProperty('--t',12+Math.random()*19+'s');
+ f.style.setProperty('--d',-Math.random()*28+'s');
+ f.style.setProperty('--drift',-45+Math.random()*90+'px');snow.append(f);
+}
+const words=['love','Movies','poetry','fries','pancakes','music','books','drum sets','violin','art','photography','HipHop'];
+const field=document.querySelector('#wordfield');
+words.forEach((w,i)=>{let e=document.createElement('span');e.className='word';e.textContent=w;e.style.setProperty('--y',5+(i*17)%68+'%');e.style.setProperty('--size',21+(i%4)*8+'px');e.style.setProperty('--rot',-25+(i*13)%50+'deg');e.style.setProperty('--duration',18+(i%5)*2+'s');e.style.setProperty('--delay',-i*2+'s');field.append(e)});
+['poetry','art','love','music','books','violin'].forEach((w,i)=>{let e=document.createElement('span');e.className='landed';e.textContent=w;e.style.setProperty('--x',4+i*16+'%');e.style.setProperty('--y',2+(i%3)*3+'%');e.style.setProperty('--size',13+(i%3)*5+'px');e.style.setProperty('--rot',-18+i*7+'deg');field.append(e)});
+const birth=new Date(2002,11,22,0,0,0),pad=n=>String(n).padStart(2,'0');
+function tick(){let now=new Date(),s=Math.max(0,Math.floor((now-birth)/1000));document.querySelector('#lived').textContent=`${Math.floor(s/3600)}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`;
+let next=new Date(now.getFullYear(),11,22);if(now>=next)next=new Date(now.getFullYear()+1,11,22);s=Math.max(0,Math.floor((next-now)/1000));document.querySelector('#birthday').textContent=`${Math.floor(s/86400)*24+Math.floor(s%86400/3600)}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`}
+tick();setInterval(tick,1000);
+</script>
+</body></html>
